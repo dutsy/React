@@ -1,49 +1,74 @@
 import React, { Component } from 'react';
-import { Card, CardImg, CardText, CardBody, CardTitle, CardImgOverlay } from 'reactstrap'
+import { Card, CardImg, CardText, CardBody, CardTitle, CardImgOverlay, BreadcrumbItem, Breadcrumb } from 'reactstrap'
+import { Link } from 'react-router-dom';
 
+function RenderDish({ dish }) {
+    return (
+        <div className='col-12 col-md-5 m-1'>
+            <Card>
+                <CardImg top src={dish.image} alt={dish.name} />
+                <CardBody>
+                    <CardTitle>{dish.name}</CardTitle>
+                    <CardText>{dish.description}</CardText>
+                </CardBody>
+            </Card>
+        </div>
+    );
+}
 
-class DishDetail extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            dish: null
-        }
+function RenderComments({ comments }) {
+    if (comments != null) {
+        return (
+            <div className='col-12 col-md-5 m-1'>
+                <h4>comments</h4>
+                <ul className="list-unstyled">
+                    {/* {comments.map((comment) => {
+                        return (
+                            <li key={comment.id}>
+                                <p>{comment.comment}</p>
+                                <p>-- {comment.author}</p>
+                            </li>
+                        );
+                    })} */}
+                </ul>
+            </div>
+        );
+    } else {
+        return (
+            <div></div>
+        );
     }
+}
 
-    render() {
-        //just i have to make the all the elements as a called function instead of writing the code and elements it self in the return in the render thank all wish you all the best.
-        if (this.props.dish != null) {
-            return (
-                <div className="container">
-                    <div className='row'>
-                        <div key={this.props.dish.id} className="col-12 col-md-5 m-1">
-                            <Card tag="li">
-                                <CardImg width="100%" object src={this.props.dish.image} alt={this.props.dish.name} />
-                                <CardImgOverlay>
-                                    <CardTitle heading>
-                                        {this.props.dish.name}
-                                    </CardTitle>
-                                </CardImgOverlay>
-                            </Card>
-                        </div>
-                        <div className="col-12 col-md-5 m-1">
-                            <Card tag='li'>
-                                <CardBody>
-                                    <CardTitle heading>{this.props.dish.name}</CardTitle>
-                                    <CardText>{this.props.dish.comments[0].author}</CardText>
-                                    <CardText>{this.props.dish.comments[0].comment}</CardText>
-                                </CardBody>
-                            </Card>
-                        </div>
+const DishDetail = (props) => {
+    if (props.dish != null)
+        return (
+            <div className="container">
+                <div className="row">
+                    <Breadcrumb>
+
+                        <BreadcrumbItem><Link to="/menu">Menu</Link></BreadcrumbItem>
+                        <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
+                    </Breadcrumb>
+                    <div className="col-12">
+                        <h3>{props.dish.name}</h3>
+                        <hr />
                     </div>
                 </div>
-            );
-        }
-        else {
-            return (<div></div>);
-        }
-    }
+                <div className="row">
+                    <div className="col-12 col-md-5 m-1">
+                        <RenderDish dish={props.dish} />
+                    </div>
+                    <div className="col-12 col-md-5 m-1">
+                        <RenderComments comments={props.comments} />
+                    </div>
+                </div>
+            </div>
+        );
+    else
+        return (
+            <div></div>
+        );
 }
 
 export default DishDetail;
